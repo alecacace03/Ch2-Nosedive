@@ -10,9 +10,22 @@
 		5AE087572EBD3466002F6B28 /* MoodDetector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodDetector.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		5AE087642EBD3468002F6B28 /* Exceptions for "MoodDetector" folder in "MoodDetector" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 5AE087562EBD3466002F6B28 /* MoodDetector */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		5AE087592EBD3466002F6B28 /* MoodDetector */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				5AE087642EBD3468002F6B28 /* Exceptions for "MoodDetector" folder in "MoodDetector" target */,
+			);
 			path = MoodDetector;
 			sourceTree = "<group>";
 		};
