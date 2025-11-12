@@ -115,12 +115,12 @@ struct ChartsView: View {
                             .font(.caption)
                             .fontWeight(.semibold)
                         
-                        HStack(spacing: 0) {
-                            Label("😢 0-0.4", systemImage: "")
-                            Label("😕 0.4-0.8", systemImage: "")
-                            Label("😐 0.8-1.2", systemImage: "")
-                            Label("🙂 1.2-1.6", systemImage: "")
-                            Label("😄 1.6-2", systemImage: "")
+                        HStack(spacing: 12) {
+                            Text("😢 0-0.4")
+                            Text("😕 0.4-0.8")
+                            Text("😐 0.8-1.2")
+                            Text("🙂 1.2-1.6")
+                            Text("😄 1.6-2")
                         }
                         .font(.caption)
                     }
