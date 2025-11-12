@@ -10,13 +10,14 @@ import SwiftData
 
 @Model
 final class Item {
-    var journal: String
-    var mood: String
-    var value: Int
-    var summerize: String
-    var data: Date
     
-    init(journal: String, mood: String, value: Int, summerize: String, data: Date) {
+    var journal: String = ""
+    var mood: String = ""
+    var value: Double = 0.0
+    var summerize: String = ""
+    var data: Date = Date.now
+    
+    init(journal: String, mood: String, value: Double, summerize: String, data: Date) {
         self.journal = journal
         self.mood = mood
         self.value = value

@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
     @State private var showingAdd = false
@@ -27,7 +28,14 @@ struct ContentView: View {
                         NavigationLink {
                             Text(item.journal)
                         } label: {
-                            Text(item.mood)
+                            HStack{
+                                Text(item.mood)
+                                Text(item.summerize)
+                                Spacer()
+                                Text(item.data.formatted(date: .abbreviated, time: .omitted))
+                                    .font(Font.footnote)
+                                    .foregroundColor(.secondary)
+                            }
                         }
                     }
                     .onDelete(perform: deleteItems)
@@ -51,13 +59,7 @@ struct ContentView: View {
             }
         }
     }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(journal: "A", mood:"B", value: 3, summerize: "C", data: Date())
-            modelContext.insert(newItem)
-        }
-    }
+    
 
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
