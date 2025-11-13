@@ -8,11 +8,25 @@
 import SwiftUI
 
 struct TabBarView: View {
+    
+    @State private var selectedTab = 0  // Currently selected tab
+    
     var body: some View {
-        
-        TabView(selection: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Selection@*/.constant(1)/*@END_MENU_TOKEN@*/) {
-            ContentView().tabItem { Image(systemName: "house"); Text("Home")}.tag(1)
-            ChartsView().tabItem {Image(systemName: "chart.bar.xaxis"); Text("Charts") }.tag(2)
+        TabView(selection: $selectedTab) {
+            // Home tab
+            Tab("Home", systemImage: "house", value: 0) {
+                ContentView()
+            }
+            
+            // Charts tab
+            Tab("Charts", systemImage: "chart.bar.xaxis", value: 1) {
+                ChartsView()
+            }
+            
+            // Search tab (marked with search role for better platform semantics)
+            Tab("Search", systemImage: "magnifyingglass", value: 2, role: .search) {
+                SearchView()
+            }
         }
     }
 }

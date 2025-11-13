@@ -12,239 +12,324 @@ import SwiftData
 
 struct AddView: View {
     
+    // Environment
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
+    // Editor state
     @State private var dailyDescription: String = ""
-    let placeholder = "What's on your mind?"
     @FocusState private var isEditorFocused: Bool
     
-    private var score: Double {
-           let scoreString = getSentimentScore(from: dailyDescription) ?? "0.0"
-           return Double(scoreString) ?? 0.0
-       }
-    
-    private var moodEmoji: String {
-            switch score {
-            case ..<(-0.6):
-                return "😢"
-            case -0.6..<(-0.2):
-                return "😕"
-            case -0.2..<0.2:
-                return "😐"
-            case 0.2..<0.6:
-                return "🙂"
-            default: // Covers 0.6 and above
-                return "😆"
-            }
-        }
-    
+    // Apple Intelligence language model (availability-checked)
     private var model = SystemLanguageModel.default
     
-    var body: some View {
-        
-        
-            ScrollView{
-                VStack{
-                    
-                    ZStack{
-                        
-                       TextEditor(text: $dailyDescription)
-                        // 3. Applica modificatori per stile e dimensione
-                            .frame(maxWidth: .infinity, minHeight: 200, maxHeight: 300)// Imposta un'altezza minima
-                            .scrollContentBackground(.hidden)
-                            .background(Color(.secondarySystemBackground))
-                            .focused($isEditorFocused)
-                            .padding(5)
-                            
-                        
-
-                        if dailyDescription.isEmpty {
-                            Text(placeholder)
-                                .foregroundColor(Color(UIColor.placeholderText))
-                                .allowsHitTesting(false)
-                            
-                        }
-                        
-                    }
-                    .padding()
-                    
-                    Text("Caracters: \(dailyDescription.count)")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    
-                    
-                    
-                   Text("MOOD SCORE:")
-                        .padding(.top, 50)
-                        .padding(.bottom,20)
-                        .font(.headline)
-                        .foregroundColor(.primary)
-                        
-                    
-                   
-                        
-                Text(score + 1, format: .number.precision(.fractionLength(1)))
-                                    
-                    
-                Text(moodEmoji)
-                        .font(.system(size: 70))
-                        .padding()
-                        
-                    
-                        
-                  
-                    
-                }.toolbar {
-                        
-                    
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                                        Button("Save") {
-                                            Task {
-                                                    await saveItem()
-                                                                    }
-                                        }
-                                        // Disable save button if there is no text
-                                        .disabled(dailyDescription.isEmpty)
-                                    }
-                    }
-                    
-            }.navigationTitle("Diary of the day")
-                .navigationBarTitleDisplayMode(.large)
-                .onTapGesture {
-                
-                isEditorFocused = false
-            }
-                .ignoresSafeArea(.keyboard, edges: .bottom)
-        
+    // MARK: - Derived State
+    
+    // Sentiment score derived from the text (as Double, -1...1)
+    private var rawScore: Double {
+        let scoreString = getSentimentScore(from: dailyDescription) ?? "0.0"
+        return Double(scoreString) ?? 0.0
     }
     
-    private func saveItem() async{
+    // Normalized score shown to user (0...2)
+    private var normalizedScore: Double {
+        rawScore + 1.0
+    }
+    
+    // Emoji derived from the raw score
+    private var moodEmoji: String {
+        switch rawScore {
+        case ..<(-0.6):       return "😢"
+        case -0.6..<(-0.2):   return "😕"
+        case -0.2..<0.2:      return "😐"
+        case 0.2..<0.6:       return "🙂"
+        default:              return "😆"
+        }
+    }
+    
+    // Readable mood label for accessibility and clarity
+    private var moodLabel: String {
+        switch rawScore {
+        case ..<(-0.6):       return "Very Sad"
+        case -0.6..<(-0.2):   return "A Bit Down"
+        case -0.2..<0.2:      return "Neutral"
+        case 0.2..<0.6:       return "Content"
+        default:              return "Very Happy"
+        }
+    }
+    
+    // Brief mood description shown under the score
+    private var moodDescription: String {
+        switch rawScore {
+        case ..<(-0.6):
+            return "It looks like today feels heavy. Writing can help."
+        case -0.6..<(-0.2):
+            return "A few things might be weighing on you."
+        case -0.2..<0.2:
+            return "A balanced day. Not too bad, not too great."
+        case 0.2..<0.6:
+            return "A good, positive vibe overall."
+        default:
+            return "A great day! Keep the momentum."
+        }
+    }
+    
+    // MARK: - Body
+    
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 20) {
+                
+                // Header Card: Mood overview
+                moodHeaderCard
+                
+                // Minimal Editor Card (more space for writing)
+                editorCard
+                
+                // Footer / Tips
+                tipCard
+            }
+            .padding(.horizontal)
+            .padding(.top, 12)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        Task { await saveItem() }
+                    } label: {
+                        Text("Save")
+                            .fontWeight(.semibold)
+                    }
+                    .disabled(dailyDescription.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    .accessibilityLabel("Save entry")
+                    .accessibilityHint("Saves your journal entry with mood analysis")
+                }
+            }
+        }
+        .navigationTitle("Diary of the Day")
+        .navigationBarTitleDisplayMode(.large)
+        .onTapGesture {
+            // Dismiss keyboard when tapping outside
+            isEditorFocused = false
+        }
+        .ignoresSafeArea(.keyboard, edges: .bottom)
+        .animation(.easeInOut(duration: 0.2), value: rawScore)
+    }
+    
+    // MARK: - Cards
+    
+    private var moodHeaderCard: some View {
+        VStack(spacing: 12) {
+            // Emoji
+            Text(moodEmoji)
+                .font(.system(size: 72))
+                .frame(maxWidth: .infinity)
+                .accessibilityHidden(true)
+            
+            // Score + Label
+            VStack(spacing: 4) {
+                HStack(spacing: 8) {
+                    Text(normalizedScore, format: .number.precision(.fractionLength(1)))
+                        .font(.system(.largeTitle, design: .rounded))
+                        .fontWeight(.bold)
+                        .accessibilityLabel("Mood score")
+                        .accessibilityValue("\(normalizedScore, format: .number.precision(.fractionLength(1))) out of 2")
+                    
+                    Capsule()
+                        .fill(Color.secondary.opacity(0.3))
+                        .frame(width: 1, height: 24)
+                    
+                    Text(moodLabel)
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+                        .accessibilityLabel("Mood")
+                        .accessibilityValue(moodLabel)
+                }
+                
+                Text(moodDescription)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 8)
+                    .accessibilityLabel("Mood description")
+                    .accessibilityValue(moodDescription)
+            }
+            .padding(.bottom, 4)
+        }
+        .padding(.vertical, 20)
+        .frame(maxWidth: .infinity)
+        .background(.thinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Mood overview")
+        .accessibilityHint("Shows your current mood and score based on your text")
+    }
+    
+    // Minimal, distraction-free editor with maximum writing space
+    private var editorCard: some View {
+        VStack(spacing: 10) {
+            ZStack(alignment: .topLeading) {
+                // Background with subtle border
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .fill(Color(.secondarySystemBackground))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            .stroke(Color.secondary.opacity(0.15), lineWidth: 1)
+                    )
+                
+                // Large, comfortable editor
+                TextEditor(text: $dailyDescription)
+                    .frame(minHeight: 360, maxHeight: 600)  // much larger writing area
+                    .padding(18) // generous padding inside
+                    .background(Color.clear)
+                    .focused($isEditorFocused)
+                    .font(.body) // keep it readable and adaptive
+                    .accessibilityLabel("Journal text")
+                    .accessibilityHint("Describe your day and how you feel")
+                
+                // Clean placeholder
+                if dailyDescription.isEmpty {
+                    Text("Write your thoughts here…")
+                        .foregroundColor(Color(UIColor.placeholderText))
+                        .padding(.horizontal, 24)
+                        .padding(.vertical, 22)
+                        .allowsHitTesting(false)
+                        .accessibilityHidden(true)
+                }
+            }
+            
+            // Subtle footer with character count
+            HStack {
+                Spacer()
+                Text("\(dailyDescription.count) characters")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .accessibilityLabel("Character count")
+                    .accessibilityValue("\(dailyDescription.count) characters")
+            }
+            .padding(.horizontal, 6)
+        }
+        .padding(2) // tight outer padding to maximize space
+    }
+    
+    private var tipCard: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: "lightbulb")
+                .foregroundStyle(.yellow)
+                .font(.title3)
+                .padding(.top, 2)
+            
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Tip")
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                Text("Write naturally. Your mood score updates as you type, and your entry will be summarized when you save.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(14)
+        .background(Color(.secondarySystemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+    }
+    
+    // MARK: - Save
+    
+    // Saves a new Item using a summary from Apple Intelligence when available, with a safe fallback
+    private func saveItem() async {
+        let generator = UINotificationFeedbackGenerator()
+        generator.prepare()
         
         var summary: String = createSimpleSummary(from: dailyDescription)
         
         switch model.availability {
-            
-            
-                case .available:
-                    // Show your intelligence UI.
-            do{
+        case .available:
+            // Try summarization via Apple Intelligence
+            do {
                 summary = try await summarizeText(dailyDescription)
-            }catch{
+            } catch {
                 // Fallback to simple summary on error
                 summary = createSimpleSummary(from: dailyDescription)
-                print("Errore durante il riassunto: \(error.localizedDescription)")
+                print("Error during summarization: \(error.localizedDescription)")
             }
-            
-                case .unavailable(.deviceNotEligible):
-                    // Show an alternative UI.
-                summary = createSimpleSummary(from: dailyDescription)
-                case .unavailable(.appleIntelligenceNotEnabled):
-                    // Ask the person to turn on Apple Intelligence.
-                summary = createSimpleSummary(from: dailyDescription)
-                case .unavailable(.modelNotReady):
-                    // The model isn't ready because it's downloading or because of other system reasons.
-                summary = createSimpleSummary(from: dailyDescription)
-                case .unavailable(_):
-                    // The model is unavailable for an unknown reason.
-                summary = createSimpleSummary(from: dailyDescription)
-                }
-        
-            // Create the new Item
-            let newItem = Item(
-                journal: dailyDescription,
-                mood: moodEmoji,
-                value: score + 1, // Storing score as an Int (e.g., -6, 0, 8)
-                summerize: summary, // You can use FoundationModels here later
-                data: Date()
-            )
-            
-            // Insert it into the context
-            modelContext.insert(newItem)
-            
-            // Go back to the previous screen
-            dismiss()
+        case .unavailable(.deviceNotEligible),
+             .unavailable(.appleIntelligenceNotEnabled),
+             .unavailable(.modelNotReady),
+             .unavailable(_):
+            // Fallbacks for all unavailable cases
+            summary = createSimpleSummary(from: dailyDescription)
         }
-    
-    private func summarizeText(_ text: String) async throws -> String {
         
+        // Create and insert the new item
+        let newItem = Item(
+            journal: dailyDescription.trimmingCharacters(in: .whitespacesAndNewlines),
+            mood: moodEmoji,
+            value: normalizedScore,  // Store normalized score (0...2)
+            summerize: summary,
+            data: Date()
+        )
+        
+        modelContext.insert(newItem)
+        generator.notificationOccurred(.success)
+        dismiss()
+    }
+    
+    // MARK: - Summarization
+    
+    // Summarizes text using LanguageModelSession with language-aware instructions
+    private func summarizeText(_ text: String) async throws -> String {
         let tagger = NSLinguisticTagger(tagSchemes: [.language], options: 0)
         tagger.string = text
         let detectedLanguage = tagger.dominantLanguage
         
-        let instructions : String
+        let instructionsEn = "Summarize the text in one concise, natural sentence, in first person only. Do not mention the text, author, or writer. Never include phrases like “This text,” “This user,” or “The following describes.” Do not explain, apologize, or mention context. If the text is short or unclear, infer a plausible short summary."
+        let instructionsIt = "Riassumi il testo in un'unica frase concisa e naturale, solo in prima persona. Non menzionare il testo, l'autore o lo scrittore. Non includere frasi come “Questo testo”, “Questo utente” o “Quanto segue descrive”. Non spiegare, non scusarti e non menzionare il contesto. Se il testo è breve o poco chiaro, deduci un breve riassunto plausibile."
         
-        let prompt : String
-        
-        let instructionsEn = "Summarize the text in one concise, natural sentence, without mentioning the text or author or the writer, only content in first person. Never include phrases like “This text,” “This user,” or “The following describes.” NEVER explain, apologize, or mention context. If the text is short, incomplete, or unclear, infer a plausible short summary rather than stating it's too short."
-        
-        let instructionsIt = "Riassumi il testo in un'unica frase concisa e naturale, senza riferimenti al testo o all'autore o allo scrittore, solo contenuto in prima persona. Non includere mai frasi come Questo testo , Questo utente o Quanto segue descrive. MAI spiegare, scusarti o menzionare il contesto. Se il testo è breve, incompleto o poco chiaro, deduci un breve riassunto plausibile anziché affermare che è troppo breve."
-
-
-            
-        let promptEn = "\(text)"
-        
-        let promptIt = "\(text)"
-        
-        if detectedLanguage == "it" {
-            instructions = instructionsIt
-        } else {
-            instructions = instructionsEn
-        }
-        
-        if detectedLanguage == "it" {
-            prompt = promptIt
-        } else {
-            prompt = promptEn
-        }
+        let instructions = (detectedLanguage == "it") ? instructionsIt : instructionsEn
+        let prompt = text
         
         let session = LanguageModelSession(instructions: instructions)
-        
         let response = try await session.respond(to: prompt)
         return response.content
-        }
+    }
     
+    // MARK: - Fallback Summary
+    
+    // Simple, local summary fallback (first sentence or first 7 words)
     private func createSimpleSummary(from text: String) -> String {
-            
-            // Pulisce il testo da spazi bianchi iniziali/finali
-            let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
-            
-            // Cerca il primo punto, che di solito segna la fine di una frase.
-            if let firstSentenceEnd = trimmedText.firstIndex(of: ".") {
-                // Estrae la sottostringa fino al punto (incluso)
-                let firstSentence = trimmedText[...firstSentenceEnd]
-                return String(firstSentence)
-                
+        let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if let firstSentenceEnd = trimmedText.firstIndex(of: ".") {
+            let firstSentence = trimmedText[...firstSentenceEnd]
+            return String(firstSentence)
+        } else {
+            let words = trimmedText.split(separator: " ")
+            if words.count > 7 {
+                let firstSeven = words.prefix(7).joined(separator: " ")
+                return firstSeven + "..."
             } else {
-                // Non c'è un punto? Prendi le prime 100 parole
-                // o semplicemente tronca il testo.
-                let words = trimmedText.split(separator: " ")
-                if words.count > 7 {
-                    let firstSeven = words.prefix(7).joined(separator: " ") // Prendi le prime 7 parole e le unisci
-                        return firstSeven + "..."
-                } else {
-                    
-                    return trimmedText
-                }
+                return trimmedText
             }
         }
+    }
     
+    // MARK: - Sentiment
+    
+    // Returns the sentiment score as a String from -1.0 (negative) to 1.0 (positive)
     func getSentimentScore(from text: String) -> String? {
-        
-        // 1.
         let tagger = NLTagger(tagSchemes: [.tokenType, .sentimentScore])
         tagger.string = text
         var detectedSentiment: String?
         
-        // 2.
-        tagger.enumerateTags(in: text.startIndex ..< text.endIndex,
-                             unit: .paragraph,
-                             scheme: .sentimentScore, options: []) { sentiment, _ in
-            
+        tagger.enumerateTags(
+            in: text.startIndex ..< text.endIndex,
+            unit: .paragraph,
+            scheme: .sentimentScore,
+            options: []
+        ) { sentiment, _ in
             if let sentimentScore = sentiment {
                 detectedSentiment = sentimentScore.rawValue
             }
-            
             return true
         }
         

@@ -10,6 +10,7 @@ import SwiftData
 
 @main
 struct MoodDetectorApp: App {
+    // Shared SwiftData container for the app
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
