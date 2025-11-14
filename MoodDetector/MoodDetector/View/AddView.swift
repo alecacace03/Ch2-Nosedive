@@ -33,7 +33,7 @@ struct AddView: View {
     
     // Normalized score shown to user (0...2)
     private var normalizedScore: Double {
-        rawScore + 1.0
+        (rawScore + 1.0) * 5.0
     }
     
     // Emoji derived from the raw score
@@ -77,17 +77,20 @@ struct AddView: View {
     // MARK: - Body
     
     var body: some View {
+        NavigationStack{
         ScrollView {
             VStack(spacing: 20) {
                 
                 // Header Card: Mood overview
                 moodHeaderCard
                 
+                // Tips
+                tipCard
+                
                 // Minimal Editor Card (more space for writing)
                 editorCard
                 
-                // Footer / Tips
-                tipCard
+                
             }
             .padding(.horizontal)
             .padding(.top, 12)
@@ -96,23 +99,41 @@ struct AddView: View {
                     Button {
                         Task { await saveItem() }
                     } label: {
-                        Text("Save")
+                        Image(systemName: "checkmark")
                             .fontWeight(.semibold)
+                            .foregroundStyle(Color.white)
+                            
                     }
+                    .buttonStyle(.glassProminent)
+                    
                     .disabled(dailyDescription.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                     .accessibilityLabel("Save entry")
                     .accessibilityHint("Saves your journal entry with mood analysis")
+                    
+                }
+                
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button() {
+                        dismiss()
+                        
+                    }label: {
+                        Image(systemName: "xmark")
+                            .fontWeight(.semibold)
+
+                            
+                    }
                 }
             }
         }
         .navigationTitle("Diary of the Day")
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
         .onTapGesture {
             // Dismiss keyboard when tapping outside
             isEditorFocused = false
         }
         .ignoresSafeArea(.keyboard, edges: .bottom)
         .animation(.easeInOut(duration: 0.2), value: rawScore)
+    }
     }
     
     // MARK: - Cards
@@ -128,11 +149,11 @@ struct AddView: View {
             // Score + Label
             VStack(spacing: 4) {
                 HStack(spacing: 8) {
-                    Text(normalizedScore, format: .number.precision(.fractionLength(1)))
+                    Text(normalizedScore, format: .number.precision(.fractionLength(0)))
                         .font(.system(.largeTitle, design: .rounded))
                         .fontWeight(.bold)
                         .accessibilityLabel("Mood score")
-                        .accessibilityValue("\(normalizedScore, format: .number.precision(.fractionLength(1))) out of 2")
+                        .accessibilityValue("\(normalizedScore, format: .number.precision(.fractionLength(1))) out of 10")
                     
                     Capsule()
                         .fill(Color.secondary.opacity(0.3))
@@ -157,8 +178,12 @@ struct AddView: View {
         }
         .padding(.vertical, 20)
         .frame(maxWidth: .infinity)
-        .background(.thinMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color(.secondarySystemBackground))
+                .shadow(color: .black.opacity(0.05), radius: 10, x: 0, y: 5)
+        )
+        
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Mood overview")
         .accessibilityHint("Shows your current mood and score based on your text")
@@ -167,9 +192,20 @@ struct AddView: View {
     // Minimal, distraction-free editor with maximum writing space
     private var editorCard: some View {
         VStack(spacing: 10) {
+            
+            HStack {
+                Spacer()
+                Text("\(dailyDescription.count) characters")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .accessibilityLabel("Character count")
+                    .accessibilityValue("\(dailyDescription.count) characters")
+            }
+            .padding(.horizontal, 6)
+            
             ZStack(alignment: .topLeading) {
                 // Background with subtle border
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
                     .fill(Color(.secondarySystemBackground))
                     .overlay(
                         RoundedRectangle(cornerRadius: 18, style: .continuous)
@@ -191,22 +227,14 @@ struct AddView: View {
                     Text("Write your thoughts here…")
                         .foregroundColor(Color(UIColor.placeholderText))
                         .padding(.horizontal, 24)
-                        .padding(.vertical, 22)
+                        .padding(.vertical, 25)
                         .allowsHitTesting(false)
                         .accessibilityHidden(true)
                 }
             }
             
             // Subtle footer with character count
-            HStack {
-                Spacer()
-                Text("\(dailyDescription.count) characters")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .accessibilityLabel("Character count")
-                    .accessibilityValue("\(dailyDescription.count) characters")
-            }
-            .padding(.horizontal, 6)
+            
         }
         .padding(2) // tight outer padding to maximize space
     }
@@ -229,8 +257,12 @@ struct AddView: View {
             Spacer(minLength: 0)
         }
         .padding(14)
-        .background(Color(.secondarySystemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color(.secondarySystemBackground))
+                .shadow(color: .black.opacity(0.05), radius: 10, x: 0, y: 5)
+        )
+        
     }
     
     // MARK: - Save

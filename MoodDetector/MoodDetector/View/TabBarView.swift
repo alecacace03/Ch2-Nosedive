@@ -23,9 +23,13 @@ struct TabBarView: View {
                 ChartsView()
             }
             
+           
+            
             // Search tab (marked with search role for better platform semantics)
             Tab("Search", systemImage: "magnifyingglass", value: 2, role: .search) {
-                SearchView()
+                NavigationStack {
+                    SearchView()
+                }
             }
         }
     }

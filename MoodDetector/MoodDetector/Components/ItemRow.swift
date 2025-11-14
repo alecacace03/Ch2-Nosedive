@@ -35,6 +35,7 @@ struct ItemRow: View {
                     .foregroundColor(.secondary)
             }
         }
+        
         .padding(.vertical, 4)
     }
 }

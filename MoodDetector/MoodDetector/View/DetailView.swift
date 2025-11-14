@@ -19,6 +19,15 @@ struct DetailView: View {
                     Text(item.mood)
                         .font(.system(size: 60))
                     
+                    Capsule()
+                        .fill(Color.secondary.opacity(0.3))
+                        .frame(width: 2, height: 30)
+                    
+                    Text(String(Int(item.value)))
+                        .font(.system(size: 40))
+                        .padding(.horizontal, 7)
+                        
+                    
                     Spacer()
                     
                     // Date in long format
@@ -50,7 +59,7 @@ struct DetailView: View {
     let sample = Item(
         journal: "Today was a productive day. I took a walk in the park and read a good book.",
         mood: "🙂",
-        value: 1.4,
+        value: 5,
         summerize: "Productive and calm day.",
         data: Date()
     )

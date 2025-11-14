@@ -50,8 +50,10 @@ struct ContentView: View {
                     .listStyle(.plain)
                 }
             }
+          
             // Home title
-            .navigationTitle("MoodTracker")
+            
+            .navigationTitle("Home")
             .navigationBarTitleDisplayMode(.large)
             
             // Toolbar with edit and add actions
@@ -69,9 +71,13 @@ struct ContentView: View {
                 }
             }
             // Navigate to AddView when requested
-            .navigationDestination(isPresented: $showingAdd) {
-                AddView()
-            }
+          //  .navigationDestination(isPresented: $showingAdd) {
+           //     AddView()
+                
+          //  }
+            
+        }.sheet(isPresented: $showingAdd ){
+            AddView()
         }
     }
     
@@ -100,7 +106,7 @@ struct ContentView: View {
             let item = Item(
                 journal: "Today was a \(summaries[i % summaries.count].lowercased()) day. I did many interesting things and had time to reflect on various aspects of my life. I feel grateful for everything I have.",
                 mood: moods[i % moods.count],
-                value: Double.random(in: 0...2),
+                value: Double(Int.random(in: 0...10)),
                 summerize: summaries[i % summaries.count],
                 data: Calendar.current.date(byAdding: .day, value: -i, to: Date())!
             )
