@@ -66,10 +66,6 @@ To create a new entry:
 3.  Write about your day. Observe how the real-time score and emoji update as the natural language model analyzes your text.
 4.  Tap **Save** (✓) to finalize the entry. The summary will be generated upon saving.
 
-## 🤝 Contributing
-
-This project is a personal initiative, but contributions, issues, and feature requests are welcome! Feel free to check the issues page or open a Pull Request.
-
 ## 📝 License
 
 This project is licensed under the **MIT License**.
