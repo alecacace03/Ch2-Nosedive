@@ -15,7 +15,7 @@
 
 The project is built entirely within the Apple ecosystem, leveraging the latest native frameworks for performance and stability.
 
-* **Platform:** iOS / iPadOS (Deployment Target: 26.1+)
+* **Platform:** iOS / iPadOS (Deployment Target: 26.0+)
 * **Language:** Swift 5.0+
 * **UI Framework:** SwiftUI
 * **Persistence:** SwiftData
