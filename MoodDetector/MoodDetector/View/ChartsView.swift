@@ -23,6 +23,10 @@ struct ChartsView: View {
         case weekly = "Week"
         case monthly = "Month"
         
+        var localizedName: String {
+                NSLocalizedString(self.rawValue, comment: "")
+            }
+        
         // Helper per avere icone
         var icon: String {
             switch self {
@@ -103,12 +107,12 @@ struct ChartsView: View {
         }
         
         var text: String {
-            switch self {
-            case .up: return "In improvement"
-            case .down: return "Declining"
-            case .neutral: return "Stable"
-            }
-        }
+               switch self {
+               case .up: return NSLocalizedString("in improvement", comment: "")
+               case .down: return NSLocalizedString("declining", comment: "")
+               case .neutral: return NSLocalizedString("stable", comment: "")
+               }
+           }
     }
     
     var body: some View {
@@ -172,7 +176,7 @@ struct ChartsView: View {
                                     Image(systemName: period.icon)
                                         .font(.title3)
                                     
-                                    Text(period.rawValue)
+                                    Text(period.localizedName)
                                         .font(.subheadline)
                                         .fontWeight(selectedPeriod == period ? .semibold : .regular)
                                 }
@@ -307,11 +311,11 @@ struct ChartsView: View {
                                 GridItem(.flexible()),
                                 GridItem(.flexible())
                             ], spacing: 16) {
-                                LegendItem(emoji: "😢", range: "0.0 – 2.0", label: "Very Sad")
-                                LegendItem(emoji: "😕", range: "2.0 – 4.0", label: "A Bit Down")
-                                LegendItem(emoji: "😐", range: "4.0 – 6.0", label: "Neutral")
-                                LegendItem(emoji: "🙂", range: "6.0 – 8.0", label: "Content")
-                                LegendItem(emoji: "😄", range: "8.0 – 10", label: "Very Happy")
+                                LegendItem(emoji: "😢", range: "0.0 – 2.0", label: NSLocalizedString("Very Sad", comment: ""))
+                                LegendItem(emoji: "😕", range: "2.0 – 4.0", label: NSLocalizedString("A bit Down", comment: ""))
+                                LegendItem(emoji: "😐", range: "4.0 – 6.0", label: NSLocalizedString("Neutral", comment: ""))
+                                LegendItem(emoji: "🙂", range: "6.0 – 8.0", label: NSLocalizedString("Content", comment: ""))
+                                LegendItem(emoji: "😄", range: "8.0 – 10", label: NSLocalizedString("Very Happy", comment: ""))
                             }
                         }
                         .padding()

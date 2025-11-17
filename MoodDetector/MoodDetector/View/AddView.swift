@@ -50,27 +50,29 @@ struct AddView: View {
     // Readable mood label for accessibility and clarity
     private var moodLabel: String {
         switch rawScore {
-        case ..<(-0.6):       return "Very Sad"
-        case -0.6..<(-0.2):   return "A Bit Down"
-        case -0.2..<0.2:      return "Neutral"
-        case 0.2..<0.6:       return "Content"
-        default:              return "Very Happy"
+        case ..<(-0.6):       return NSLocalizedString("Very Sad", comment: "")
+        case -0.6..<(-0.2):   return NSLocalizedString("A bit Down", comment: "")
+        case -0.2..<0.2:      return NSLocalizedString("Neutral", comment: "")
+        case 0.2..<0.6:       return NSLocalizedString("Content", comment: "")
+        default:              return NSLocalizedString("Very Happy", comment: "")
         }
     }
+    
+   
     
     // Brief mood description shown under the score
     private var moodDescription: String {
         switch rawScore {
         case ..<(-0.6):
-            return "It looks like today feels heavy. Writing can help."
+            return  NSLocalizedString("It looks like today feels heavy. Writing can help.", comment: "")
         case -0.6..<(-0.2):
-            return "A few things might be weighing on you."
+            return NSLocalizedString("A few things might be weighing on you.", comment: "")
         case -0.2..<0.2:
-            return "A balanced day. Not too bad, not too great."
+            return NSLocalizedString("A balanced day. Not too bad, not too great.", comment: "")
         case 0.2..<0.6:
-            return "A good, positive vibe overall."
+            return NSLocalizedString("A good, positive vibe overall.", comment: "")
         default:
-            return "A great day! Keep the momentum."
+            return NSLocalizedString("A great day! Keep the momentum.", comment: "")
         }
     }
     

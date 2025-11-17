@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd">
+  <file original="InfoPlist.xcstrings" source-language="en" target-language="it" datatype="plaintext">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="26.1.1" build-num="17B100"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleDisplayName" xml:space="preserve">
+        <source>Nosedive</source>
+        <note>Bundle display name</note>
+      </trans-unit>
+      <trans-unit id="CFBundleName" xml:space="preserve">
+        <source>MoodDetector</source>
+        <note>Bundle name</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Localizable.xcstrings" source-language="en" target-language="it" datatype="plaintext">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="26.1.1" build-num="17B100"/>
+    </header>
+    <body>
+      <trans-unit id="%@ out of 10" xml:space="preserve">
+        <source>%@ out of 10</source>
+        <note from="auto-generated">The value of the mood score, formatted to one decimal place.</note>
+      </trans-unit>
+      <trans-unit id="%lld characters" xml:space="preserve">
+        <source>%lld characters</source>
+        <note from="auto-generated">A text view displaying the number of characters in the journal entry.</note>
+      </trans-unit>
+      <trans-unit id="%lld items" xml:space="preserve">
+        <source>%lld items</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Add Item" xml:space="preserve">
+        <source>Add Item</source>
+        <note from="auto-generated">A button label that says "Add Item".</note>
+      </trans-unit>
+      <trans-unit id="Add notes to see your progress" xml:space="preserve">
+        <source>Add notes to see your progress</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Average Mood" xml:space="preserve">
+        <source>Average Mood</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Character count" xml:space="preserve">
+        <source>Character count</source>
+        <note from="auto-generated">A label that shows the number of characters in the text editor.</note>
+      </trans-unit>
+      <trans-unit id="Charts" xml:space="preserve">
+        <source>Charts</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Date" xml:space="preserve">
+        <source>Date</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Describe your day and how you feel" xml:space="preserve">
+        <source>Describe your day and how you feel</source>
+        <note from="auto-generated">A hint that appears when the text editor is empty, encouraging the user to describe their day and feelings.</note>
+      </trans-unit>
+      <trans-unit id="Detail" xml:space="preserve">
+        <source>Detail</source>
+        <note from="auto-generated">The title of the view that appears in the navigation bar at the top of the screen.</note>
+      </trans-unit>
+      <trans-unit id="Diary of the Day" xml:space="preserve">
+        <source>Diary of the Day</source>
+        <note from="auto-generated">The title of the view.</note>
+      </trans-unit>
+      <trans-unit id="Home" xml:space="preserve">
+        <source>Home</source>
+        <note from="auto-generated">The title of the main view in the app.</note>
+      </trans-unit>
+      <trans-unit id="Journal text" xml:space="preserve">
+        <source>Journal text</source>
+        <note from="auto-generated">An accessibility label for the text editor in the "Add" view.</note>
+      </trans-unit>
+      <trans-unit id="Legend" xml:space="preserve">
+        <source>Legend</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Mood" xml:space="preserve">
+        <source>Mood</source>
+        <note from="auto-generated">The title of the section that lists the user's moods.</note>
+      </trans-unit>
+      <trans-unit id="Mood description" xml:space="preserve">
+        <source>Mood description</source>
+        <note from="auto-generated">A description of the user's current mood.</note>
+      </trans-unit>
+      <trans-unit id="Mood overview" xml:space="preserve">
+        <source>Mood overview</source>
+        <note from="auto-generated">A title for a view that shows the user's current mood and score based on their text.</note>
+      </trans-unit>
+      <trans-unit id="Mood score" xml:space="preserve">
+        <source>Mood score</source>
+        <note from="auto-generated">A label describing the mood score.</note>
+      </trans-unit>
+      <trans-unit id="Mood trend" xml:space="preserve">
+        <source>Mood trend</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="No data available" xml:space="preserve">
+        <source>No data available</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="No notes" xml:space="preserve">
+        <source>No notes</source>
+        <note from="auto-generated">A message displayed when there are no journal entries.</note>
+      </trans-unit>
+      <trans-unit id="No results" xml:space="preserve">
+        <source>No results</source>
+        <note from="auto-generated">A message displayed when there are no matching search results.</note>
+      </trans-unit>
+      <trans-unit id="Save entry" xml:space="preserve">
+        <source>Save entry</source>
+        <note from="auto-generated">A button that saves a user's journal entry with mood analysis.</note>
+      </trans-unit>
+      <trans-unit id="Saves your journal entry with mood analysis" xml:space="preserve">
+        <source>Saves your journal entry with mood analysis</source>
+        <note from="auto-generated">An accessibility hint for the "Save" button in the AddView.</note>
+      </trans-unit>
+      <trans-unit id="Search" xml:space="preserve">
+        <source>Search</source>
+        <note from="auto-generated">The title of the search screen.</note>
+      </trans-unit>
+      <trans-unit id="Search by summary, text, or mood" xml:space="preserve">
+        <source>Search by summary, text, or mood</source>
+        <note from="auto-generated">A description under the search field that instructs the user on how to use it.</note>
+      </trans-unit>
+      <trans-unit id="Search notes" xml:space="preserve">
+        <source>Search notes</source>
+        <note from="auto-generated">A prompt for the user to input text to search through their notes.</note>
+      </trans-unit>
+      <trans-unit id="Search your notes" xml:space="preserve">
+        <source>Search your notes</source>
+        <note from="auto-generated">A prompt for the user to search their notes.</note>
+      </trans-unit>
+      <trans-unit id="Shows your current mood and score based on your text" xml:space="preserve">
+        <source>Shows your current mood and score based on your text</source>
+        <note from="auto-generated">A hint that describes the function of the "Mood overview" card.</note>
+      </trans-unit>
+      <trans-unit id="Tap + to create your first note" xml:space="preserve">
+        <source>Tap + to create your first note</source>
+        <note from="auto-generated">A description below the "No notes" text, instructing the user to add their first note.</note>
+      </trans-unit>
+      <trans-unit id="Tip" xml:space="preserve">
+        <source>Tip</source>
+        <note from="auto-generated">A label for a tip in the "Add" view.</note>
+      </trans-unit>
+      <trans-unit id="Try different keywords" xml:space="preserve">
+        <source>Try different keywords</source>
+        <note from="auto-generated">A suggestion displayed below the "No results" message in the search view, encouraging the user to try different keywords.</note>
+      </trans-unit>
+      <trans-unit id="Value" xml:space="preserve">
+        <source>Value</source>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Write naturally. Your mood score updates as you type, and your entry will be summarized when you save." xml:space="preserve">
+        <source>Write naturally. Your mood score updates as you type, and your entry will be summarized when you save.</source>
+        <note from="auto-generated">A tip displayed in the "Add" view, encouraging users to write naturally and for the mood score to update in real-time.</note>
+      </trans-unit>
+      <trans-unit id="Write your thoughts here…" xml:space="preserve">
+        <source>Write your thoughts here…</source>
+        <note from="auto-generated">A placeholder text that appears when the user hasn't written anything in the journal editor.</note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
