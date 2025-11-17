@@ -48,6 +48,7 @@ struct DetailView: View {
                     .font(.body)
             }
             .padding()
+            .toolbar(.hidden, for: .tabBar)
         }
         .navigationTitle("Detail")
         .navigationBarTitleDisplayMode(.inline)

@@ -102,7 +102,7 @@ struct ContentView: View {
         let moods = ["😄", "😐", "🙂", "😕", "😢"]
         let summaries = ["Great day", "Normal day", "A bit stressful", "Very productive", "Total relax"]
         
-        for i in 0..<10 {
+        for i in 0..<30 {
             let item = Item(
                 journal: "Today was a \(summaries[i % summaries.count].lowercased()) day. I did many interesting things and had time to reflect on various aspects of my life. I feel grateful for everything I have.",
                 mood: moods[i % moods.count],
